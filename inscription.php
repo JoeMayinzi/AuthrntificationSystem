@@ -76,6 +76,7 @@
                     <span class="error"><?php echo $error ?></span>
                 <?php
             }
+            unset($_SESSION);
            };
         ?>
         <div class="name">

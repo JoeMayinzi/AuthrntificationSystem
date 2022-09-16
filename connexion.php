@@ -7,35 +7,40 @@
 
     if(isset($connectBtn)) {
       if (isset($mail, $pass) && !empty($mail) && !empty($pass)) {
-
+        $_SESSION['error'] = [];
         if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
-            die('Veillez entrer un email valide');
+
+            $_SESSION['error'][] = "Veillez entrer un email valide";
         }
 
-        require_once "connect.php";
+        if ($_SESSION['error'] === []) {
 
-        $select = "SELECT * FROM `utilisateurs` WHERE `email` = '$mail'";
-        $query = $dataBase->query($select);
-        $user =  $query->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$user) {
-            die("utilisateur n'existe pas");
-        } 
+            require_once "connect.php";
 
-        if (!password_verify($_POST['pass'], $user['password'])) {
-            die("Mot de passe Incorrect");
+            $select = "SELECT * FROM `utilisateurs` WHERE `email` = '$mail'";
+            $query = $dataBase->query($select);
+            $user =  $query->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$user) {
+
+                $_SESSION['error'] = "utilisateur n'existe pas";
+            } 
+
+            if (!password_verify($_POST['pass'], $user['password'])) {
+                $_SESSION['error'][] = "Mot de passe Incorrect";
+            }
+
+            $_SESSION['user'] = [
+                "id" => $user['id'],
+                "nom"=> $user['username'],
+                "email" => $user['email'],
+            ];
+
+            header("location: profil.php");
         }
-
-        $_SESSION['user'] = [
-            "id" => $user['id'],
-            "nom"=> $user['username'],
-            "email" => $user['email'],
-        ];
-
-        header("location: profil.php");
     
       } else {
-        die('Veillez remplir tous les champs');
+        $_SESSION['error'] = ['Veillez remplir tous les champs'];
       } 
     }
 ?>
@@ -53,6 +58,16 @@
 <body>
     <form method="post">
         <h2>Connexion</h2>
+        <?php
+           if(isset($_SESSION['error'])) {
+            foreach ($_SESSION['error'] as $error) {
+                ?>
+                    <span class="error"><?php echo $error ?></span>
+                <?php
+            }
+            unset($_SESSION);
+           };
+        ?>
         <div class="email">
             <label for="email">Email</label>
             <input type="text" name="email" for="email" placeholder="Entrez votre adresse email">
