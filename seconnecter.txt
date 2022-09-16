@@ -1,0 +1,28 @@
+// ici l'email et le mot de passe sont correctes
+    // On demarre la session PHP
+    // on stocke dans $_session les informations de l'utlisateur (id, username, password) pas le mot de passe
+    // on redirige vers la page profil (par exemple)
+
+
+========= Page inscription ===============
+// après toutes les verifications on connecte directement le username en demmarant la session 
+// dans les infos stockées en session l'id on recupère lasinsertId()
+
+============ Page Déconnexion =============
+
+// on demarre la session
+// on supprime la session de l'utlisateur
+// on redirige vers la page de connexion
+
+=========== Page Profil =================
+
+// on demarre la session
+// On affiche le nom et l'email du user (à designer)
+
+==== Si on est connecté on fais apparairaitre que le btn deconnexion et inscriptopn======
+=== si on est connecté on fais apparaitre le btn deconnexion seulement ========
+
+======= Si on est dèja connecté on peut pas aller vers la page inscription si on essaie on nous redirige vers 
+la page d'accueil
+
+
